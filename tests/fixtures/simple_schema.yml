@@ -1,0 +1,14 @@
+schema_type:
+  userId:
+    type: String
+    attributes:
+      required: False
+      attribute: user_id
+      missing: null
+  anonymousId:
+    type: String
+    attributes:
+      required: False
+      attribute: anonymous_id 
+schema_attribute:
+  unknown: 'exclude'

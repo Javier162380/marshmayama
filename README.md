@@ -2,7 +2,7 @@
 
 ### Introduction
 
-Maybe one day maybe you need to define Marshmallow Schemas dinamically, so you can easily decouple the configuration from your code. This library tryes to help you generating Marshmallow Schemas from a yaml file.
+Maybe one day you need to define Marshmallow Schemas dinamically, so you can easily decouple the configuration from your code. This library tryes to help you generating Marshmallow Schemas from a yaml file.
 
 ### Usage
 

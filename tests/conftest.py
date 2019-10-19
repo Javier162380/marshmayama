@@ -3,7 +3,7 @@ import pytest
 
 from marshmayama import Marshmayama
 
-fixtures_path = os.path.abspath('fixtures')
+fixtures_path = os.path.abspath('tests/fixtures')
 
 @pytest.fixture
 def marshmayama_instance():

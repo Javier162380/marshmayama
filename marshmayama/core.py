@@ -1,14 +1,12 @@
 import marshmallow
 import yaml
 
-from exceptions import MarshmayamaInvalidField,MarshmayamaInvalidSchemaAttribute 
+from .exceptions import MarshmayamaInvalidField,MarshmayamaInvalidSchemaAttribute 
 
 
 class Marshmayama:
 
-    VALID_FIELDS = marshmallow.schema.__all__
-    VALID_SCHEMA_ATTRIBUTES = {field_type: list(getattr(marshmallow.field, field_type)().__dict__.keys())
-                                for field_type in VALID_FIELDS}
+    VALID_FIELDS = marshmallow.fields.__all__
     VALID_SCHEMA_ATTRIBUTES = list(marshmallow.schema.Schema().__dict__.keys())
 
     def __init__(self, schema_file: str):
@@ -25,18 +23,11 @@ class Marshmayama:
     def __is_marshamallow_field(field_type :str)-> bool:
         """Method to check if a describe field is implement under marshamallow,
           fields class"""
-        if field in Marshmayama.VALID_FIELDS:
+        if field_type in Marshmayama.VALID_FIELDS:
             return True
 
         return False
     
-    @staticmethod
-    def __is_marshmallow_field_attribute(field_type: str, field_attribute: str)-> bool:
-        """Method to check if a describe field attribute is implement under marshmallow
-           field class"""
-        if field in Marshmayama.VALID_FIELDS_ATTRIBUTES:
-            return True
-
     @staticmethod
     def __is_marshmallow_schema_attribute(schema_attribute_name: str)-> bool:
         """Method to check if a describe attribute is implement uner marshmallow
@@ -51,14 +42,14 @@ class Marshmayama:
         try:
             return self.schema_data['schema_fields']
         except KeyError:
-            return KeyError("Yaml file does not follow Marshmayama yaml structure")
+            raise KeyError("Yaml file does not follow Marshmayama yaml structure")
 
     def __get_schema_attributes(self):
         """Method to retrieve all the schea attributes define in the yaml file"""
         try:
             return self.schema_data['schema_attributes']
         except KeyError:
-            return KeyError("Yaml file does not follow Marshmayama yaml structure")
+            raise KeyError("Yaml file does not follow Marshmayama yaml structure")
 
     def __create_schema_fields(self)-> dict:
         """Method to generate a dictionary with marshmallow fields objects."""
@@ -72,17 +63,18 @@ class Marshmayama:
                                                             if field_attributes else {})      
             else:
                 raise MarshmayamaInvalidField(f"Field not supported. Supported fields: "
-                                              f"{','.join(marshmallow.fields.__all__ )}")
-    
+                                              f"{','.join(Marshmayama.VALID_FIELDS)}")
+
+        return marshmallow_fields
+
     def __set_schema_attributes(self, schema: marshmallow.Schema)-> marshmallow.Schema:
         """Method to create marshmallow schema attributes."""
         for attribute in self.__get_schema_attributes():
-            attribute_metadata
             if self.__is_marshmallow_schema_attribute(schema_attribute_name=attribute):
                 setattr(schema, attribute)
             else:
-                raise MarshmayamaInvalidSchemaAttribute(f"Schema attr not supported. Supported attributes: "
-                                                        f"{','.join(list(marshmallow.Schema().__dict__.keys())))}")
+                raise MarshmayamaInvalidSchemaAttribute("Schema attr not supported. Supported attributes: "
+                                                        f"{','.join(Marshmayama.VALID_SCHEMA_ATTRIBUTES)}")
         return schema
     
     def generate_schema(self)-> marshmallow.Schema:
@@ -96,6 +88,7 @@ class Marshmayama:
             self.__set_schema_attributes(marshmayama_schema)
         
         return marshmayama_schema
+
 
 
 

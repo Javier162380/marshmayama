@@ -1,9 +1,7 @@
 import pytest
 
-def test_load_yaml_file(marshmayama_instance):
-
+def test_get_valid_fields(marshmayama_instance):
     expected_results = {
-        "schema_fields":{
             "userId": {
                 "attributes":{
                     "required": False,
@@ -19,11 +17,13 @@ def test_load_yaml_file(marshmayama_instance):
                 },
                 "type": "String"
             },
-        },
-        "schema_attributes": {
-            "unknown": 'exclude'
         }
-    }
+    Marshmayama = marshmayama_instance('simple_schema.yml')
+    results = Marshmayama._Marshmayama__get_schema_fields()
+    assert expected_results == results
 
-    results = marshmayama_instance('simple_schema.yml').schema_data
-    assert results == expected_results
+def test_get_invalid_fields(marshmayama_instance):
+    Marshmayama = marshmayama_instance('invalid_schema_structure.yml')
+    with pytest.raises(KeyError):
+        Marshmayama._Marshmayama__get_schema_fields()
+    

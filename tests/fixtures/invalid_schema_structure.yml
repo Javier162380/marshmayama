@@ -1,4 +1,4 @@
-schema_fields:
+fields:
   userId:
     type: String
     attributes:
@@ -10,5 +10,5 @@ schema_fields:
     attributes:
       required: False
       attribute: anonymous_id 
-schema_attributes:
+attributes:
   unknown: 'exclude'

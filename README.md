@@ -1,6 +1,6 @@
 #  Marshmayama
 
-### Introduction.
+### Introduction
 
 Maybe one day you want to define Marshmallow Schemas dinamically, so you can easily decouple the configuration from your code. This library tryes to help you generating Marshmallow Schemas from a yaml file.
 

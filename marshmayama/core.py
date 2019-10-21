@@ -13,7 +13,7 @@ class Marshmayama:
 
         self.schema_file = schema_file
         self.schema_data = self.__load_yaml_file(schema_file) 
-    
+
     @staticmethod
     def __load_yaml_file(file: str)-> dict:
         """Method to load a yaml file into a valid python dict."""
@@ -54,10 +54,11 @@ class Marshmayama:
     def __create_schema_fields(self)-> dict:
         """Method to generate a dictionary with marshmallow fields objects."""
         marshmallow_fields = {}
-        for field in self.__get_schema_fields():
-            field_attributes=field['attributes']
-            field_type= field['column_type']
-            if self.__is_marshamallow_field:
+        raw_schema_fields = self.__get_schema_fields()
+        for field in raw_schema_fields:
+            field_attributes=raw_schema_fields[field]['attributes']
+            field_type= raw_schema_fields[field]['type']
+            if self.__is_marshamallow_field(field_type):
                 marshmallow_fields[field]=getattr(marshmallow.fields,field_type)(
                                                             **field_attributes  
                                                             if field_attributes else {})      
@@ -88,8 +89,3 @@ class Marshmayama:
             self.__set_schema_attributes(marshmayama_schema)
         
         return marshmayama_schema
-
-
-
-
-    

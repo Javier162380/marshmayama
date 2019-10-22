@@ -70,20 +70,21 @@ class Marshmayama:
 
     def __set_schema_attributes(self, schema: marshmallow.Schema)-> marshmallow.Schema:
         """Method to create marshmallow schema attributes."""
-        for attribute in self.__get_schema_attributes():
+        schema_attributes = self.__get_schema_attributes()
+        for attribute in schema_attributes:
             if self.__is_marshmallow_schema_attribute(schema_attribute_name=attribute):
-                setattr(schema, attribute)
+                setattr(schema, attribute, schema_attributes[attribute])
             else:
                 raise MarshmayamaInvalidSchemaAttribute("Schema attr not supported. Supported attributes: "
-                                                        f"{','.join(Marshmayama.VALID_SCHEMA_ATTRIBUTES)}")
+                                          f"{','.join(Marshmayama.VALID_SCHEMA_ATTRIBUTES)}")
+
         return schema
     
     def generate_schema(self)-> marshmallow.Schema:
         """Method to generate a Marshmallow schema from a Marshmayama definition"""
 
         schema_fields = self.__create_schema_fields()
-
-        marshmayama_schema = type('MarshmayamaSchema', (marshmallow.Schema), schema_fields)()
+        marshmayama_schema = type('MarshmayamaSchema', (marshmallow.Schema,), schema_fields)()
 
         if self.__get_schema_attributes():
             self.__set_schema_attributes(marshmayama_schema)

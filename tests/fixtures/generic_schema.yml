@@ -1,0 +1,17 @@
+schema_fields:
+  userId:
+    type: String
+    attributes:
+      required: True
+      attribute: user_id
+  anonymousId:
+    type: String
+    attributes:
+      required: False
+      attribute: anonymous_id
+  metadata:
+    type: Raw
+    attributes:
+      required: False
+schema_attributes:
+  unknown: 'exclude'
